@@ -1,20 +1,40 @@
 Sub CSAdataTransform()
+
+Dim reportMonth As Variant
+Dim reportDay As Variant
+Dim report As String
 Dim Projects As Variant
 Dim grpNum As Integer
 Dim grpSize As Integer
 Dim grpName As String
 Dim userCopy As Range
-Dim reportDate As String
 Dim userCopyCounter As Integer
 x = 1
-'group size place holder
 y = 1
-'loop counter for number of groups in report
 i = 1
 userCopyCounter = 1
 
-'user input for report date
-reportDate = InputBox("What is the date of the report? MM/DD/YYYY")
+
+'Finds and formats the report generated date from YYYYMMDD to MM/DD/YYYY
+Set reportGenerated = Range("C:C").Find("Report Generated: " & "")
+Cells(1, 4) = reportGenerated
+reportDate = Replace(Cells(1, 4), "Report Generated: ", "")
+Cells(1, 4) = reportDate
+
+Range("D1").Select
+    Selection.TextToColumns Destination:=Range("D1"), DataType:=xlFixedWidth, _
+        FieldInfo:=Array(Array(0, 1), Array(4, 1)), TrailingMinusNumbers:=True
+    Range("E1").Select
+    Selection.TextToColumns Destination:=Range("E1"), DataType:=xlFixedWidth, _
+        FieldInfo:=Array(Array(0, 1), Array(1, 1)), TrailingMinusNumbers:=True
+
+reportYear = Cells(1, 4)
+reportMonth = Cells(1, 5)
+reportDay = Cells(1, 6)
+report = reportMonth & "/" & reportDay & "/" & reportYear
+Range(Cells(1, 4), Cells(1, 6)).Clear
+
+
 
 'Finds and stores the number of groups in the CSA report. Also clears the cells
 Set Projects = Range("B:B").Find("Projects: " & "")
@@ -22,27 +42,24 @@ Cells(1, 4) = Projects
 grpNum = Replace(Cells(1, 4), "Projects: ", "")
 Cells(1, 4).Clear
 
-
+'iterates a number of times equal to the number of groups in the report
 Do While i <= grpNum
-
 
 
 'Removes the extra characters for group name and size
 grpSize = Replace(Cells(y, 2), "Group Size: ", "")
-grpName = Replace(Cells(y, 1), "Group Name: ", " ")
+grpName = Replace(Cells(y, 1), "Group Name: ", "")
 
 Set userCopy = ActiveSheet.Range(Cells(y + 1, 1), Cells(y + grpSize + 1, 1))
 userCopy.Copy Destination:=ActiveSheet.Range(Cells(userCopyCounter, 2), Cells(userCopyCounter + grpSize, 2))
     'Inputs the group name and report date based off group size
-    'Loop counter for report date and group name
     a = 1
     Do While a <= grpSize
     Cells(x, 3) = grpName
-    Cells(x, 1) = reportDate
+    Cells(x, 1) = report
     a = a + 1
     x = x + 1
     Loop
-'MsgBox y
 Cells(y, 2).Select
 
 userCopyCounter = userCopyCounter + grpSize
@@ -51,4 +68,5 @@ i = i + 1
 'MsgBox userCopyCounter
 Loop
 Range(Cells(userCopyCounter, 1), Cells(y, 3)).Clear
+Cells(1, 1).Select
 End Sub
