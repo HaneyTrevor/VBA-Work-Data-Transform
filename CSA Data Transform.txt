@@ -11,7 +11,7 @@ Dim userCopy As Range
 Dim userCopyCounter As Integer
 Dim wbstring As String
 'Sets file location for the SaveAs at the end of the scipt
-wbstring = "C:\Users\trevor.j.haney2\OneDrive - US Navy-flankspeed\Metrics\01 Processed Users Lists\Test Users " & reportGenerated & "_out.xlsx"
+wbstring = "C:\Users\Desktop\ " & reportGenerated & "_out.xlsx"
 x = 1
 y = 1
 i = 1
@@ -72,6 +72,6 @@ i = i + 1
 Loop
 Range(Cells(userCopyCounter, 1), Cells(y, 3)).Clear
 Cells(1, 1).Select
-wbstring = "C:\Users\trevor.j.haney2\OneDrive - US Navy-flankspeed\Metrics\01 Processed Users Lists\CSA Users " & reportDate & "_out.xlsx"
+wbstring = "C:\Desktop\Users " & reportDate & "_out.xlsx"
 ActiveWorkbook.SaveAs Filename:=wbstring, FileFormat:=1
 End Sub
